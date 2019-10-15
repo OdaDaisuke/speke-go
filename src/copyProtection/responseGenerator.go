@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/OdaDaisuke/speke_go/src/copyProtection/config"
 	"github.com/OdaDaisuke/speke_go/src/copyProtection/drm"
 )
 
@@ -13,12 +14,14 @@ const WIDEVINE_ID = "edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"
 const PLAYREADY_ID = "9a04f079-9840-4286-ab92-e65be0885f95"
 
 type ResponseGenerator struct {
-	wv *drm.Widevine
+	wv     *drm.Widevine
+	config *config.AppConfig
 }
 
-func NewResponseGenerator() *ResponseGenerator {
+func NewResponseGenerator(c *config.AppConfig) *ResponseGenerator {
 	return &ResponseGenerator{
-		wv: drm.NewWidevine(),
+		wv:     drm.NewWidevine(c),
+		config: c,
 	}
 }
 

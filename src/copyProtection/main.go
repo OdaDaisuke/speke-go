@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"log"
 
+	"github.com/OdaDaisuke/speke_go/src/copyProtection/config"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
@@ -20,6 +21,7 @@ type Event struct {
 }
 
 func Handler(ctx context.Context, event Event) (Response, error) {
+	c := config.NewConfig()
 	cpixXml := event.Body
 	if event.IsBase64encoded {
 		sDec, err := base64.StdEncoding.DecodeString(cpixXml)
@@ -28,7 +30,7 @@ func Handler(ctx context.Context, event Event) (Response, error) {
 		}
 		cpixXml = string(sDec)
 	}
-	response, err := NewResponseGenerator().Run(cpixXml)
+	response, err := NewResponseGenerator(c).Run(cpixXml)
 	if err != nil {
 		log.Fatalf("generating response: %s", err)
 	}
